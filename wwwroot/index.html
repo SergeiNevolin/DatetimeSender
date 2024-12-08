@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignalR Client</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #f4f4f4;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Messages from Server</h1>
+    <ul id="messages"></ul>
+
+    <script>
+        // Подключение к SignalR Hub
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/messageHub")
+            .withAutomaticReconnect()
+            .build();
+
+        connection.on("ReceiveMessage", (messageDto) => {
+            console.log(messageDto);
+
+            const messagesList = document.getElementById("messages");
+            const newMessage = document.createElement("li");
+
+            const formattedMessage = `${messageDto.timestamp} - ${messageDto.content}`;
+            newMessage.textContent = formattedMessage;
+            messagesList.appendChild(newMessage);
+
+        });
+
+        connection.start()
+            .then(() => console.log("Connected to SignalR Hub"))
+            .catch(err => console.error("Error connecting to SignalR Hub:", err));
+    </script>
+</body>
+</html>
