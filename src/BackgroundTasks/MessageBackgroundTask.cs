@@ -15,7 +15,7 @@ public class MessageBackgroundTask(IHubContext<MessageHub> hubContext, IMessageS
         while (!stoppingToken.IsCancellationRequested)
         {
             MessageDto message = _messageService.GenerateMessage();
-            await _hubContext.Clients.All.SendAsync("ReceiveMessage", message);
+            await _hubContext.Clients.All.SendAsync("ReceiveMessage", message, stoppingToken);
             await Task.Delay(3000, stoppingToken);
         }
     }
