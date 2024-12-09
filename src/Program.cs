@@ -23,3 +23,5 @@ static void ConfigureServices(IServiceCollection services)
     services.AddSingleton<IMessageService, MessageService>();
     services.AddHostedService<MessageBackgroundTask>();
 }
+
+public partial class Program { }

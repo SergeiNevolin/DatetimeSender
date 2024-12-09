@@ -5,16 +5,10 @@ using DatetimeSender.DTOs;
 
 namespace DatetimeSender.BackgroundTasks;
 
-public class MessageBackgroundTask : BackgroundService
+public class MessageBackgroundTask(IHubContext<MessageHub> hubContext, IMessageService messageService) : BackgroundService
 {
-    private readonly IHubContext<MessageHub> _hubContext;
-    private readonly IMessageService _messageService;
-
-    public MessageBackgroundTask(IHubContext<MessageHub> hubContext, IMessageService messageService)
-    {
-        _hubContext = hubContext;
-        _messageService = messageService;
-    }
+    private readonly IHubContext<MessageHub> _hubContext = hubContext;
+    private readonly IMessageService _messageService = messageService;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
